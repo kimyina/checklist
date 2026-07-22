@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
+import ctypes
 import os
 import sqlite3
 from datetime import date, timedelta
+from pathlib import Path
 
 import gi
 
@@ -12,6 +14,28 @@ from gi.repository import Gdk, Gio, GLib, Gtk
 
 APP_ID = "io.github.kimyina.checklist"
 WEEKDAYS_KO = ("월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일")
+FONT_PATH = Path(__file__).resolve().parent / "assets" / "fonts" / "Pretendard-Regular.otf"
+
+
+def register_bundled_font():
+    """Make the bundled Pretendard available only to this app process."""
+    if not FONT_PATH.is_file():
+        return False
+
+    try:
+        fontconfig = ctypes.CDLL("libfontconfig.so.1")
+        fontconfig.FcConfigGetCurrent.restype = ctypes.c_void_p
+        fontconfig.FcConfigAppFontAddFile.argtypes = (ctypes.c_void_p, ctypes.c_char_p)
+        fontconfig.FcConfigAppFontAddFile.restype = ctypes.c_int
+        config = fontconfig.FcConfigGetCurrent()
+        if not config:
+            return False
+        return bool(fontconfig.FcConfigAppFontAddFile(config, os.fsencode(FONT_PATH)))
+    except (AttributeError, OSError):
+        return False
+
+
+register_bundled_font()
 
 
 CSS = b"""

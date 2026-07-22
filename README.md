@@ -11,6 +11,7 @@
 - `Ctrl+Z` / `Ctrl+Shift+Z` 실행 취소·다시 실행
 - `Ctrl+X` / `Ctrl+C` / `Ctrl+V` 잘라내기·복사·붙여넣기
 - SQLite 자동 저장과 마지막 창 위치 복원
+- 번들 Pretendard 글꼴로 컴퓨터마다 동일한 10pt 표시
 - 인터넷 연결 없이 사용
 
 ## 요구 사항
@@ -79,3 +80,12 @@ checklist
 ```
 
 `XDG_DATA_HOME`이 설정되어 있으면 해당 경로를 사용합니다.
+
+## 포함 글꼴
+
+이 앱은 [Pretendard v1.3.9](https://github.com/orioncactus/pretendard)의
+Regular 글꼴을 앱 전용으로 불러옵니다. 시스템에 글꼴을 별도로 설치하지 않으며,
+앱을 삭제해도 시스템 글꼴 설정에 영향을 주지 않습니다.
+
+Pretendard는 SIL Open Font License 1.1로 배포됩니다. 라이선스 전문은
+`assets/fonts/LICENSE.txt`에서 확인할 수 있습니다.
