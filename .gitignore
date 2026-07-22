@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+*.db
+*.sqlite3
+.venv/
+dist/
+build/
+*.deb
+icon-chroma.png
+icon-transparent.png
