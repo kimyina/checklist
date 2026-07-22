@@ -1,5 +1,10 @@
 # checklist
 
+<p align="center">
+  <img src="assets/screenshots/calendar.png" alt="달력 화면" width="320">
+  <img src="assets/screenshots/checklist.png" alt="체크리스트 화면" width="320">
+</p>
+
 날짜별 할 일을 기록하는 작은 Linux GTK 체크리스트 앱입니다.
 
 ## 기능
