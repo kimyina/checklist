@@ -44,12 +44,12 @@ CSS = b"""
   font-size: 10pt;
 }
 window {
-  background: #ffffff;
-  color: #242424;
+  background: @theme_bg_color;
+  color: @theme_fg_color;
 }
 .topbar {
-  background: #ffffff;
-  border-bottom: 1px solid #d9d9d9;
+  background: @theme_bg_color;
+  border-bottom: 1px solid @borders;
   padding: 5px 7px;
 }
 .app-title, .date-title {
@@ -59,8 +59,8 @@ window {
   padding: 0 10px;
 }
 .calendar-shell {
-  background: #ffffff;
-  border: 1px solid #d7d7d7;
+  background: @theme_bg_color;
+  border: 1px solid @borders;
   border-radius: 4px;
 }
 .calendar-header {
@@ -81,20 +81,20 @@ window {
   min-height: 24px;
 }
 .calendar-nav:hover {
-  background-color: rgba(70, 70, 70, 0.07);
+  background-color: alpha(@theme_fg_color, 0.07);
 }
 .calendar-weekdays {
   padding: 1px 4px 0 4px;
 }
 .calendar-weekday {
-  color: #a5a5a5;
+  color: alpha(@theme_fg_color, 0.45);
 }
 .calendar-grid {
   padding: 0 4px 3px 4px;
 }
 .calendar-day,
 .calendar-day:focus {
-  color: #333333;
+  color: @theme_fg_color;
   background: transparent;
   border: 0;
   border-radius: 999px;
@@ -105,24 +105,24 @@ window {
   min-height: 25px;
 }
 .calendar-day:hover {
-  background-color: rgba(70, 70, 70, 0.07);
+  background-color: alpha(@theme_fg_color, 0.07);
 }
 .calendar-day.today {
-  color: #202020;
-  background-color: rgba(55, 55, 55, 0.18);
-  border: 1px solid rgba(45, 45, 45, 0.42);
+  color: @theme_fg_color;
+  background-color: alpha(@theme_fg_color, 0.18);
+  border: 1px solid alpha(@theme_fg_color, 0.42);
   font-weight: 700;
 }
 .calendar-day.has-tasks {
   font-weight: 700;
-  box-shadow: inset 0 -2px rgba(55, 55, 55, 0.42);
+  box-shadow: inset 0 -2px alpha(@theme_fg_color, 0.42);
 }
 .calendar-day.other-month {
-  color: rgba(70, 70, 70, 0.20);
+  color: alpha(@theme_fg_color, 0.20);
 }
 .task-list,
 .task-list:focus {
-  background: #ffffff;
+  background: @theme_bg_color;
   border: 0;
   padding: 5px 4px;
   outline-color: transparent;
@@ -133,7 +133,7 @@ window {
 .task-row:focus,
 .task-row:selected,
 .task-row:focus:selected {
-  color: #242424;
+  color: @theme_fg_color;
   background: transparent;
   padding: 3px 5px 3px 7px;
   border: 0;
@@ -141,9 +141,9 @@ window {
   box-shadow: none;
 }
 .task-row.reordering {
-  color: #242424;
-  background-color: #ffffff;
-  border: 1px solid rgba(40, 40, 40, 0.13);
+  color: @theme_fg_color;
+  background-color: @theme_bg_color;
+  border: 1px solid alpha(@theme_fg_color, 0.13);
   border-radius: 7px;
   margin: 3px 6px;
   padding: 2px 6px;
@@ -152,7 +152,7 @@ window {
 .task-row.reordering .task-text,
 .task-row.reordering .task-text text,
 .task-row.reordering .task-text text:focus {
-  background-color: #ffffff;
+  background-color: @theme_bg_color;
 }
 .task-text,
 .task-text:focus {
@@ -163,12 +163,12 @@ window {
   box-shadow: none;
 }
 .task-text text {
-  color: #242424;
+  color: @theme_fg_color;
   background: transparent;
 }
 .task-text text:focus {
-  color: #242424;
-  background-color: rgba(70, 70, 70, 0.055);
+  color: @theme_fg_color;
+  background-color: alpha(@theme_fg_color, 0.055);
   border-color: transparent;
   outline-color: transparent;
   box-shadow: none;
@@ -176,8 +176,8 @@ window {
 .task-text text:selected,
 .task-text text:focus:selected,
 .task-list selection {
-  color: #242424;
-  background-color: rgba(70, 70, 70, 0.10);
+  color: @theme_fg_color;
+  background-color: alpha(@theme_fg_color, 0.10);
   outline-color: transparent;
 }
 .task-row checkbutton,
@@ -196,9 +196,9 @@ window {
   -gtk-icon-transform: scale(0.72);
 }
 .addbar {
-  background: #ffffff;
+  background: @theme_bg_color;
   padding: 5px 8px 7px 31px;
-  border-top: 1px solid #eeeeee;
+  border-top: 1px solid @borders;
 }
 .composer {
   background: transparent;
@@ -213,18 +213,19 @@ window {
   box-shadow: none;
 }
 .composer text {
+  color: @theme_fg_color;
   background: transparent;
 }
 .composer text:selected,
 .composer text:focus:selected {
-  color: #242424;
-  background-color: rgba(70, 70, 70, 0.10);
+  color: @theme_fg_color;
+  background-color: alpha(@theme_fg_color, 0.10);
 }
 .composer-hint {
-  color: #999999;
+  color: alpha(@theme_fg_color, 0.50);
 }
 .empty-label {
-  color: #888888;
+  color: alpha(@theme_fg_color, 0.55);
   padding: 28px 10px;
 }
 """
@@ -363,17 +364,21 @@ class DailyChecklistWindow(Gtk.ApplicationWindow):
         self._undo_histories = {}
         self._reorder_row = None
         self._reorder_view = None
+        self._desktop_interface_settings = None
 
         self.connect("delete-event", self.on_delete_event)
         self.connect("destroy", self.on_destroy)
         self.connect("key-press-event", self.on_key_press)
+
+        gtk_settings = Gtk.Settings.get_default()
+        self.configure_theme_preference(gtk_settings)
 
         provider = Gtk.CssProvider()
         provider.load_from_data(CSS)
         Gtk.StyleContext.add_provider_for_screen(
             Gdk.Screen.get_default(), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         )
-        Gtk.Settings.get_default().set_property("gtk-cursor-blink", False)
+        gtk_settings.set_property("gtk-cursor-blink", False)
 
         self.stack = Gtk.Stack()
         self.stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
@@ -385,6 +390,29 @@ class DailyChecklistWindow(Gtk.ApplicationWindow):
         self.stack.add_named(self.calendar_page, "calendar")
         self.stack.add_named(self.checklist_page, "checklist")
         self.stack.set_visible_child_name("calendar")
+
+    def configure_theme_preference(self, gtk_settings):
+        schema_source = Gio.SettingsSchemaSource.get_default()
+        if schema_source is None:
+            return
+
+        schema = schema_source.lookup("org.gnome.desktop.interface", True)
+        if schema is None or not schema.has_key("color-scheme"):
+            return
+
+        self._desktop_interface_settings = Gio.Settings.new_full(schema, None, None)
+
+        def sync_dark_preference(*_args):
+            color_scheme = self._desktop_interface_settings.get_string("color-scheme")
+            gtk_settings.set_property(
+                "gtk-application-prefer-dark-theme",
+                color_scheme == "prefer-dark",
+            )
+
+        self._desktop_interface_settings.connect(
+            "changed::color-scheme", sync_dark_preference
+        )
+        sync_dark_preference()
 
     def build_calendar_page(self):
         page = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
@@ -596,7 +624,7 @@ class DailyChecklistWindow(Gtk.ApplicationWindow):
         task_view.get_style_context().add_class("task-text")
         task_buffer = task_view.get_buffer()
         task_buffer.set_text(text)
-        task_buffer.create_tag("completed", strikethrough=True, foreground="#999999")
+        task_buffer.create_tag("completed", strikethrough=True)
         self.register_undo_buffer(task_buffer)
         box.pack_start(task_view, True, True, 0)
 
