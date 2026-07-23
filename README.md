@@ -17,7 +17,8 @@
 - `Ctrl+Z` / `Ctrl+Shift+Z`: 실행 취소·다시 실행
 - `Ctrl+X` / `Ctrl+C` / `Ctrl+V`: 잘라내기·복사·붙여넣기
 - `Esc`: 달력으로 돌아가기
-- SQLite 자동 저장, 시스템 라이트·다크 테마, 마지막 창 위치 복원, Pretendard 10pt 적용
+- 시스템 설정에 맞춘 다크 모드 자동 대응
+- SQLite 자동 저장, 마지막 창 위치 복원, Pretendard 10pt 적용
 
 ## 설치
 
